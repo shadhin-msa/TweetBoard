@@ -1,0 +1,289 @@
+body{
+    color:#292F33;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+a{
+    color:#2b7bb9;
+}
+a:hover{
+    color: #3b94d9;
+    text-decoration: none;
+}
+a.visited{
+    color:#2b7bb9;
+}
+button, h1, h2, h3, h4, h5, h6,  ol, p, ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: none;
+}
+h1.title{
+    font-size: 24px;
+    line-height: 31px;
+    font-weight: 300;
+}
+h1.title .subscript{
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #657786;
+}
+table {
+    font-size: small;
+}
+
+
+
+.container {
+    position: relative;
+}
+header {
+    padding: 20px 0;
+}
+span#edit {
+    background: #efefef;
+    padding: 7px;
+    font-size: 20px;
+    border-radius: 3px;
+    position: absolute;
+    float: right;
+    right: 0;
+    transition:background 0.3s;
+    cursor: pointer;
+    z-index: 10;
+    width: 34px;
+    height: 34px;
+    box-sizing: border-box;
+    text-align: center;
+}
+span#edit:hover{
+    background: #e0e0e0;
+}
+ #edit .openIcon{
+    opacity: 1;  
+    position: relative;
+}
+ #edit .hideIcon{
+    opacity: 0;  
+    position: absolute;
+}
+
+.title-container{
+    padding: 10px;
+    border-bottom: 2px solid #abaeaf00;
+}
+ol.tweets {
+    width: 100%;
+    padding: 0;
+}
+
+ol.tweets li {
+    width: 100%;
+    border-top: 1px solid rgba(15,70,100,.12);
+    padding: 10px;
+    box-sizing: border-box;
+    transition: 0.2s;
+}
+
+ol.tweets li:hover {
+    background: aliceblue;
+}
+.tweet{
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    padding-left: 12%;
+}
+.twitter-icon {
+    max-width: 10%;
+}
+.twitter-icon a{
+    color: inherit;
+    transition: 0.4s;
+}
+
+.twitter-icon a i{
+    transition: 0.2s;
+}
+
+.twitter-icon a:hover i{
+    color: #3b94d9;
+}
+.Tweet-author {
+    width: 90%;
+}
+.twitter-icon a {
+    padding: 5px 10px;
+    text-align: center;
+}
+
+.tweet-author a.author-avatar {
+    width: 32px;
+    height: 32px; 
+    position: absolute;
+    left: 0px;
+    
+}
+.tweet-author a.author-avatar img.avatar{
+    max-width: 100%;
+    max-height: 100%;
+}
+.retweet_tag{
+    line-height: 18px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #889ba6;
+}
+.retweet_tag_icon {
+    position: absolute;
+    margin-left: -23px;
+    background: #46da9e;
+    color: white;
+    padding: 2px;
+    font-size: 0.8em;
+    border-radius: 3px;
+    height: 1.25em;
+    margin-top: 2px;
+}
+.author-head {
+    width: 100%;
+}
+.Name-container {
+    line-height: 16px;
+}
+.author-head .Name-container .name {
+    width: 100%;
+    color: #292F33;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 4px;
+}
+.author-head .Name-container .name:hover{
+    color: inherit;
+}
+.author-head .Name-container .ScreenName{
+    font-size: 13px;
+    line-height: 18px;
+    color: #8899A6;
+}
+
+p.Tweet-text {
+    font-size: 1em;
+    line-height: 1.3em;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+.Tweet-metadata{
+    display: block;
+}
+.Tweet-timestamp{
+    font-size: 12px;
+    line-height: 18px;
+    transition: all 0.2s;
+    color:#8899a6;
+}
+
+ol.tweets li:hover .Tweet-timestamp{
+    color:#667580;
+}
+
+.loading_gif{
+    width: 100px;
+    margin-top: 100px;
+    margin-left: calc( 50% - 50px );
+}
+
+#settings {
+    background: #efefef;
+    margin: 14px 0;
+    border-radius: 10px;
+    padding-top: 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s;
+    padding: 0;
+}
+#settings > div{
+    padding-top:14px;
+}
+.tooltip.in{
+    opacity: 0.9;
+}
+
+input#formDate {
+    width: 50%;
+    min-width: 90px;
+    max-width: 140px;
+    text-align: center;
+    margin: 0 auto;
+}
+#settings div{
+    text-align: center;
+}
+.slider.slider-horizontal, #settings input.btn.btn-primary.align-center {
+    margin-top: 10px;
+}
+#sortable > div {
+    border:5px solid #292f3300;
+    transition: all 0.3s;
+}
+.editMode  #sortable {
+    background: #292f3361;
+    border-radius: 5px;
+    cursor: grab;
+}
+
+.editMode  #sortable > div {
+    background: #ffffffe8;
+    border-radius: 5px;
+    border: 5px solid #0043ff1f;
+}
+.editMode  #sortable> div > .tweets {
+    opacity: 0.6;
+}
+
+.editMode  #sortable> div > .title-container{
+    border-color:#abaeaf;
+}
+
+.editMode #settings{
+    max-height: 220px;
+}
+
+.editMode #edit .openIcon{
+    opacity: 0;  
+    position: absolute;
+}
+.editMode #edit .hideIcon{
+    opacity: 1; 
+    position: relative; 
+}
+
+
+@media  (max-width:1200px){
+    .tweet-author a.author-avatar{
+        
+    width: 10%;
+    height: auto;
+    }
+}
+
+@media (min-width: 768px) and (max-width:991px){
+    .tweet-list-item {
+        padding-left:0;
+        padding-right: 0;
+    }
+
+}
+
+
+@media (max-width:576px){
+    #edit{
+        margin-right: 15px;
+    }
+}

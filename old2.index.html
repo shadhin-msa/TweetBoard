@@ -1,0 +1,236 @@
+<! DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link href="node_modules/daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <meta name="viewport" content="width=device-width">
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
+    <script type="text/javascript" src="node_modules/daterangepicker/daterangepicker.js"></script>
+    <script type="text/javascript" src="node_modules/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $.getJSON("settings.json", function (data) {
+
+                loadTweets(data.uScrName[0], data.count, '#tweet_list1');
+                loadTweets(data.uScrName[1], data.count, '#tweet_list2');
+                loadTweets(data.uScrName[2], data.count, '#tweet_list3');
+
+            });
+
+
+            $('#tweetRange').slider({
+                formatter: function (value) {
+                    return value;
+                }
+            });
+
+            $("#tweetRange").on("slide", function (slideEvt) {
+                $("#tweetRangeVal").text(slideEvt.value);
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            //Date range as a button
+            $('#daterange-btn').daterangepicker(
+                {
+                    ranges: {
+                        'Any': [moment()],
+                        'Today': [moment(), moment()],
+                        'Till Yesterday': [moment().subtract(1, 'days'), moment()],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'This Year': [moment().startOf('year'), moment()]
+                    },
+                    startDate: moment().subtract(29, 'days'),
+                    endDate: moment(),
+                    opens: 'right'
+
+                },
+                function (start, end) {
+                    $('#daterange-btn span').html(start.format(' D MMM, YY') + ' - ' + end.format('D MMM, YY'))
+                    $('#start').val(start.format(' D MMM, YY'));
+                    $('#end').val(end.format(' D MMM, YY'));
+                    
+                }
+            )
+
+        })
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <Header>
+            <h1>Touring Tweet Challenge</h1>
+        </Header>
+        <form method="POST" action="">
+            <dv class="row " id="settings">
+                <div class="col ">
+                    <div class="form-group">
+
+
+                        <div class="input-group">
+                            <button type="button" class="btn btn-default pull-right" id="daterange-btn">
+                                <span>
+                                    <i class="fa fa-calendar"></i> Date range picker
+                                </span>
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    Column Order <br /> makeSchool | HackerNews | ycombinator
+                </div>
+                <div class="col">
+                    <span id="tweetRangeValLabel">No of Tweet: <span id="tweetRangeVal">10</span></span><br />
+                    <input id="tweetRange" type="text" data-slider-min="1" data-slider-max="30" data-slider-step="1"
+                        data-slider-value="10" />
+                    <input type="hidden" id="startDate" name="start">
+                    <input type="hidden" id="endDate" name="end">
+
+                </div>
+                <div class="col">
+                    <input type="submit" value="Save" />
+                </div>
+
+
+            </dv>
+        </form>
+        <div class="row">
+
+            <div class=" col-12 col-md-4" id="tweet_list1">
+                <img class="loading_gif" src="images/loading.gif" />
+            </div>
+            <div class=" col-12 col-md-4" id="tweet_list2">
+                <img class="loading_gif" src="images/loading.gif" />
+            </div>
+            <div class=" col-12 col-md-4 " id="tweet_list3">
+                <img class="loading_gif" src="images/loading.gif" />
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+
+
+        function loadTweets(screen_name, count, element) {
+            var jsonUrl = "http://localhost:7890/1.1/statuses/user_timeline.json?count=" + count + "&screen_name=" + screen_name;
+
+            $.getJSON(jsonUrl, function (data) {
+                var items = [];
+                $.each(data, function (key, val) {
+
+                    var user, tweet_body, tweet_link, user_link, user_name, user_screen_name, user_pp, retweet_tag, tweet;
+                    if (!val.retweeted_status) {
+                        user = val.user;
+                        tweet_body = val.text;
+                        retweet_tag = "";
+                    } else {
+                        user = val.retweeted_status.user;
+                        tweet_body = val.retweeted_status.text;
+                        retweet_tag = '<div class="retweet_tag">' +
+                            '   <div class="retweet_tag_icon"> <i class="fas fa-retweet"></i></div>' +
+                            val.user.name + ' Retweeted' +
+                            '</div>';
+                    }
+
+                    tweet_link = 'https://twitter.com/' + user.screen_name + '/status/' + val.id_str;
+                    user_link = 'https://twitter.com/' + user.screen_name;
+                    user_name = user.name;
+                    user_screen_name = user.screen_name;
+                    user_pp = user.profile_image_url;
+
+                    if (val.entities.user_mentions[0]) {
+                        var m = val.entities.user_mentions;
+                        $.each(m, function (m_key, m_val) {
+                            var link = '<a href="https://twitter.com/' + m_val.screen_name + '">@' + m_val.screen_name + '</a>'
+                            tweet_body = tweet_body.replace('@' + m_val.screen_name, link);
+
+                        })
+                    }
+
+                    if (val.entities.hashtags[0]) {
+                        var h = val.entities.hashtags;
+                        $.each(h, function (h_key, h_val) {
+                            var link = ' <a href="https://twitter.com/hashtag/' + h_val.text + '?src=hash">#' + h_val.text + '</a>'
+                            tweet_body = tweet_body.replace('#' + h_val.text, link);
+
+                        })
+                    }
+
+                    if (val.entities.urls[0]) {
+                        var u = val.entities.urls;
+                        $.each(u, function (u_key, u_val) {
+                            var link = ' <a href="' + u_val.url + '">' + u_val.url + '</a>'
+                            tweet_body = tweet_body.replace(u_val.url, link);
+
+                        })
+                    }
+
+                    tweet = '<li  class="tweet-list-item ">' +
+                        '<div class="Tweet"  >' +
+                        '  <div class="twitter-icon float-right" >' +
+                        '      <a href="' + tweet_link + '"><i class="fab fa-twitter"></i></a>' +
+                        '  </div >' +
+                        retweet_tag +
+                        '  <div class="Tweet-author  ">' +
+                        '      <a class="author-avatar" href="' + user_link + '" aria-label="' + user_name + ' (screen name: ' + user_screen_name + ')"><img' +
+                        '          class="avatar" alt="MakeSchool" src="' + user_pp + '"></a>' +
+
+                        '          <div class="author-head ">' +
+                        '              <a class="author-link " href="' + user_link + '">' +
+                        '                  <div class="Name-container">' +
+                        '                      <span class="Name" title="' + user_name + '">' + user_name + '</span><br />' +
+                        '                      <span class="ScreenName" title="@' + user_screen_name + '">@' + user_screen_name + '</span>' +
+                        '                  </div>' +
+                        '              </a>' +
+                        '          </div>' +
+                        '              </div>' +
+                        '      <p class="Tweet-text">' + tweet_body + '</p>' +
+                        '      <div class="Tweet-metadata">' +
+                        '          <a href="' + tweet_link + '" class="Tweet-timestamp float-right">' + calculateSince(val.created_at) + '</a>' +
+                        '      </div>' +
+                        '      <br clear="both">' +
+                        '          </div>' +
+                        '      </li>';
+
+                    items.push(tweet);
+                });
+                var all_tweets = items.join("");
+
+                var container = '<div class="title-container">' +
+                    '                    <h1 class="title">Tweet <span class="subscript">by <a href="https://twitter.com/' + data[0].user.screen_name + '">' + data[0].user.name + '</a></span></h1></div>' +
+                    '                <ol class="tweets">' + all_tweets + '</ol> </div>';
+
+                $(element).html(container);
+
+            });
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

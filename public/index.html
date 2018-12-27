@@ -1,0 +1,147 @@
+<! DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link href="lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="lib/bootstrap-slider/dist/css/bootstrap-slider.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="lib/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script type="text/javascript" src="lib/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            //Datepicker
+            $('.datepicker').datepicker({
+                weekStart: 0,
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                endDate: "today",
+                clearBtn: true
+            });
+
+
+            $('#tweetCount').slider({
+                formatter: function (value) {
+                    return value;
+                }
+            });
+
+            $("#tweetCount").on("slide", function (slideEvt) {
+                $("#tweetCountVal").text(slideEvt.value);
+            });
+
+
+            $("#edit").click(function () {
+
+                var iteration = $(this).data('iteration') || 1
+                switch (iteration) {
+                    case 1:
+                        startSortable();
+                        $('body').addClass('editMode');
+                        break;
+
+                    case 2:
+                        stopSortable();
+                        $('body').removeClass('editMode');
+                        break;
+                }
+                iteration++;
+                if (iteration > 2) iteration = 1
+                $(this).data('iteration', iteration)
+            });
+            
+            
+            $.getJSON("settings.json", function (data) {
+
+                loadTweets(data.uScrName[0], data.count, data.fromDate, '#tweet_list1');
+                loadTweets(data.uScrName[1], data.count, data.fromDate, '#tweet_list2');
+                loadTweets(data.uScrName[2], data.count, data.fromDate, '#tweet_list3');
+
+                $("#tweetCountVal").html(data.count);
+                $('#tweetCount').slider('setValue', data.count);
+
+
+                $('#formDate').datepicker("setDate", data.fromDate);
+
+            });
+
+
+        });
+
+
+
+
+    </script>
+
+</head>
+
+<body>
+    <div class="container">
+        <Header>
+            <h1>Touring Tweet Challenge</h1>
+        </Header>
+        <span id="edit"> <i class="openIcon fas fa-sliders-h"></i> <i class="hideIcon fas fa-times"></i></span>
+
+        <form method="POST" action="" id="form">
+            <dv class="row " id="settings">
+                <div class="col ">
+                    <div class="form-group">
+                        <label>Tweet from ___ to now </label>
+                        <div class='input-group ' id='datetimepicker1'>
+                            <input type="text" id="formDate" autocomplete="off" class="datepicker" name="fromDate"
+                                data-date-format="dd/mm/yyyy">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <span id="tweetCountValLabel">No of Tweet: <span id="tweetCountVal">4</span></span><br />
+                    <input id="tweetCount" type="text" data-slider-value="1" data-slider-min="1" data-slider-max="30"
+                        data-slider-step="1" data-myval="10" name="count" placeholder="yyyy-mm-dd" />
+
+                </div>
+                <div class="col">
+                    <input id="inputOrder0" type="hidden" name="order[]" />
+                    <input id="inputOrder1" type="hidden" name="order[]" />
+                    <input id="inputOrder2" type="hidden" name="order[]" />
+                    <input class="btn btn-primary align-center" type="submit" value="Done" />
+                </div>
+            </dv>
+        </form>
+
+        <div id="sortableContainer ">
+            <div class="row " id="sortable">
+                <div class=" col-12 col-md-4" id="tweet_list1" data-order="0">
+                    <img class="loading_gif" src="images/loading.gif" />
+                </div>
+                <div class=" col-12 col-md-4" id="tweet_list2" data-order="1">
+                    <img class="loading_gif" src="images/loading.gif" />
+                </div>
+                <div class=" col-12 col-md-4 " id="tweet_list3" data-order="2">
+                    <img class="loading_gif" src="images/loading.gif" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</body>
+
+</html>
